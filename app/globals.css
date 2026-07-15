@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --evoke-cyan: #028fbe;
+  --evoke-teal: #15bf9e;
+  --evoke-mint: #18c68f;
+  --evoke-border: #dce9ef;
+  --evoke-surface: #f3f6f8;
+  --evoke-bg-base: #fafbfc;
+  --evoke-bg-elevated: #ffffff;
+  --evoke-bg-muted: #f3f6f8;
+  --evoke-bg-accent: #eef4f6;
+}
+
+.evoke-gradient-text {
+  background: linear-gradient(135deg, var(--evoke-cyan) 0%, var(--evoke-teal) 52%, var(--evoke-mint) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.evoke-gradient-bg {
+  background: linear-gradient(135deg, var(--evoke-cyan) 0%, var(--evoke-teal) 52%, var(--evoke-mint) 100%);
+}
+
+@keyframes shimmer { 
+  0% { background-position: -200% 0; } 
+  100% { background-position: 200% 0; } 
+}
+
+@keyframes marquee { 
+  0% { transform: translateX(0); } 
+  100% { transform: translateX(-50%); } 
+}
+
+@keyframes marquee-reverse { 
+  0% { transform: translateX(-50%); } 
+  100% { transform: translateX(0); } 
+}
+
+.marquee-container { 
+  width: 100%; 
+  overflow: hidden; 
+  display: flex; 
+}
+
+.marquee-content { 
+  display: flex; 
+  gap: 0; 
+  animation: marquee 40s linear infinite; 
+}
+
+.marquee-content-rev { 
+  display: flex; 
+  gap: 0; 
+  animation: marquee-reverse 50s linear infinite; 
+}
+
+.marquee-container:hover .marquee-content {
+  animation-play-state: paused;
+}
+
+.marquee-container:hover .marquee-content-rev {
+  animation-play-state: paused;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #1dc393, #27bce2, #7fe7ce);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #1dc393, #27bce2);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1dc393 rgba(0, 0, 0, 0.1);
+}
+
+.no-scrollbar::-webkit-scrollbar { 
+  display: none; 
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  overflow-x: clip;
+  font-family: 'GT Walsheim Pro','system-ui', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Imported interactive/fan/card styles from evoke-features globals.css --- */
+
+/* Premium shadow structures */
+.phone-shadow {
+  box-shadow: 0 40px 80px -15px rgba(15, 23, 42, 0.25), 
+              0 20px 40px -20px rgba(0, 0, 0, 0.3),
+              inset 0 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.card-shadow {
+  box-shadow: 0 12px 30px -8px rgba(15, 23, 42, 0.08),
+              0 4px 12px -5px rgba(0, 0, 0, 0.03);
+}
+
+/* Precise angles of fanning cards */
+@media (min-width: 1024px) {
+  .fan-left-1 { transform: rotate(-9deg) translate(20px, 30px); }
+  .fan-left-2 { transform: rotate(-4deg) translate(8px, 12px); }
+  .fan-left-3 { transform: rotate(-1deg) translate(0px, 0px); }
+  
+  .fan-right-1 { transform: rotate(1deg) translate(0px, 0px); }
+  .fan-right-2 { transform: rotate(4deg) translate(-8px, 12px); }
+  .fan-right-3 { transform: rotate(9deg) translate(-20px, 30px); }
+}
+
+/* Hover transitions for fanning cards */
+.interactive-card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.interactive-card:hover {
+  transform: scale(1.05) rotate(0deg) translate(0, -10px) !important;
+  z-index: 40 !important;
+}
+
+/* Pulse animation for active node lines */
+@keyframes subtle-pulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.98); }
+  50% { opacity: 0.4; transform: scale(1.02); }
+}
+.live-pulse {
+  animation: subtle-pulse 2.5s ease-in-out infinite;
+}
+
+/* Canvas gradient helper used by EvokeAI section */
+.bg-canvas-gradient {
+  background: linear-gradient(135deg, #fdf4f5 0%, #fef2f2 25%, #f5f3ff 50%, #f0fdf4 75%, #ecfdf5 100%);
+}
+
+/* small utility for tab/content transitions */
+.tab-content-transition {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* end imported block */
+
+@media (max-width: 768px) {
+  /* Hide the phone mockup on small screens (features page) */
+  .phone-shadow {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+}

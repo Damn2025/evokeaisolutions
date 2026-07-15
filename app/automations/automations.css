@@ -1,0 +1,137 @@
+.automations-page {
+  --color-evoke-black: #050505;
+  --color-evoke-accent: #2563eb;
+  --color-evoke-accent-light: #60a5fa;
+  --color-evoke-accent-dark: #1d4ed8;
+  --color-evoke-surface: #f8fafc;
+
+  color: var(--color-evoke-black);
+  background-color: #faf9ff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.automations-page .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.automations-page .section-padding {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .automations-page .section-padding {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .automations-page .section-padding {
+    padding-left: 6rem;
+    padding-right: 6rem;
+  }
+}
+
+.automations-page .text-gradient {
+  background-image: linear-gradient(to right, #2563eb, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.automations-page .bg-grid-pattern {
+  background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+.automations-page .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.automations-page .scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.automations-page .animate-gradient-x {
+  background-size: 200% 200%;
+  animation: automations-gradient-x 15s ease infinite;
+}
+
+@keyframes automations-gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes automations-marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.automations-page .animate-marquee {
+  display: flex;
+  animation: automations-marquee 20s linear infinite;
+  width: max-content;
+}
+
+.automations-page .animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Contact CTA — hard styles so Tailwind/preflight cannot strip them */
+.automations-page .automations-growth-btn {
+  display: flex !important;
+  width: 100% !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.75rem !important;
+  padding: 1.5rem 1.25rem !important;
+  border: none !important;
+  border-radius: 1rem !important;
+  background-color: #2563eb !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  font-size: 1.25rem !important;
+  font-weight: 900 !important;
+  line-height: 1.25 !important;
+  cursor: pointer !important;
+  box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.35) !important;
+  transition: background-color 0.2s ease, opacity 0.2s ease !important;
+}
+
+.automations-page .automations-growth-btn:hover:not(:disabled) {
+  background-color: #1d4ed8 !important;
+}
+
+.automations-page .automations-growth-btn:disabled {
+  opacity: 0.7 !important;
+  cursor: not-allowed !important;
+}
+
+.automations-page .automations-growth-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
