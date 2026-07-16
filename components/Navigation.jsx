@@ -65,14 +65,13 @@ const Navigation = ({ theme, jumpTo }) => {
     automation: '/features', // legacy milestone id
     partners: '/our-clients',
     blogs: '/blog',
-    contact: '/contact',
+    contact: '/contact-us',
     'ai-assistants': '/ai-assistants',
     consultancy: '/consultancy',
   };
 
   const isActivePath = (path) => {
     if (path === '/') return pathname === '/';
-    if (path === '/contact') return pathname === '/contact' || pathname === '/contact-us';
     return pathname === path || pathname.startsWith(`${path}/`);
   };
 

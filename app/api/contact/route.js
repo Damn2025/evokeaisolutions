@@ -1,29 +1,23 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { postWebhookJson } from "../../../lib/postWebhook";
 
-function getSmtpConfig() {
-  const host = process.env.SMTP_HOST?.trim();
-  const user = process.env.SMTP_USER?.trim();
-  // Gmail app passwords are often stored with spaces; strip them for auth
-  const pass = process.env.SMTP_PASS?.replace(/\s+/g, "");
-  const to = process.env.SMTP_TO_EMAIL?.trim();
-  const from = (process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER)?.trim();
-  const port = Number(process.env.SMTP_PORT) || 587;
-  const secure = String(process.env.SMTP_SECURE || "").trim() === "true";
+export const runtime = "nodejs";
 
-  const missing = [];
-  if (!host) missing.push("SMTP_HOST");
-  if (!user) missing.push("SMTP_USER");
-  if (!pass) missing.push("SMTP_PASS");
-  if (!to) missing.push("SMTP_TO_EMAIL");
-  if (!from) missing.push("SMTP_FROM_EMAIL");
+const CONTACT_WEBHOOK_URL =
+  process.env.CONTACT_WEBHOOK_URL?.trim() ||
+  "https://damnart-ai-guladab.n8n-wsk.com/webhook/841cb938-c6ff-4a18-bc00-55b4dec95bce";
 
-  return { host, user, pass, to, from, port, secure, missing };
+export async function GET() {
+  return NextResponse.json({
+    success: true,
+    message: "Contact API is ready. Submit the form with POST.",
+  });
 }
 
 export async function POST(request) {
   try {
-    const { fullName, company, email, phone, location, vision } = await request.json();
+    const body = await request.json();
+    const { fullName, company, email, phone, location, vision, source } = body || {};
 
     if (!fullName || !email) {
       return NextResponse.json(
@@ -32,65 +26,38 @@ export async function POST(request) {
       );
     }
 
-    const smtp = getSmtpConfig();
-    if (smtp.missing.length) {
-      console.error("SMTP misconfigured. Missing:", smtp.missing.join(", "));
+    const payload = {
+      fullName,
+      company: company || "",
+      email,
+      phone: phone || "",
+      location: location || "",
+      vision: vision || "",
+      source: source || "contact-form",
+      submittedAt: new Date().toISOString(),
+    };
+
+    const res = await postWebhookJson(CONTACT_WEBHOOK_URL, payload);
+
+    if (!res.ok) {
+      console.error("Contact webhook failed:", res.status, res.body);
       return NextResponse.json(
-        { success: false, message: "Email service is not configured on the server" },
-        { status: 500 }
+        { success: false, message: "Failed to submit contact form" },
+        { status: 502 }
       );
     }
 
-    const transporterOptions = {
-      host: smtp.host,
-      port: smtp.port,
-      secure: smtp.secure,
-      auth: {
-        user: smtp.user,
-        pass: smtp.pass,
-      },
-    };
-
-    if (process.env.SMTP_ALLOW_SELF_SIGNED === "true") {
-      transporterOptions.tls = { rejectUnauthorized: false };
-      console.warn("Warning: SMTP_ALLOW_SELF_SIGNED=true — accepting self-signed certificates (DEV only)");
-    }
-
-    const transporter = nodemailer.createTransport(transporterOptions);
-
-    const mailOptions = {
-      from: `"Evoke AI Leads" <${smtp.from}>`,
-      replyTo: email,
-      to: smtp.to,
-      subject: `New Contact Form Submission from ${fullName}`,
-      text: `New Contact Form Submission\n\nFull Name: ${fullName}\nCompany: ${company || "N/A"}\nEmail: ${email}\nPhone: ${phone || "N/A"}\nLocation: ${location || "N/A"}\nVision: ${vision || "N/A"}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Full Name:</strong> ${fullName}</p>
-        <p><strong>Company:</strong> ${company || "N/A"}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone || "N/A"}</p>
-        <p><strong>Location:</strong> ${location || "N/A"}</p>
-        <p><strong>Vision:</strong><br/> ${vision || "N/A"}</p>
-      `,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    return NextResponse.json({ success: true, message: "Email sent successfully" }, { status: 200 });
+    return NextResponse.json(
+      { success: true, message: "Form submitted successfully" },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error sending email:", {
-      code: error?.code,
-      command: error?.command,
-      response: error?.response,
-      responseCode: error?.responseCode,
-      message: error?.message,
-    });
+    console.error("Contact form error:", error?.cause || error?.message || error);
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to send email",
-        detail: process.env.NODE_ENV === "development" ? error?.message : undefined,
+        message: "Failed to submit contact form",
+        detail: process.env.NODE_ENV === "development" ? String(error?.message || error) : undefined,
       },
       { status: 500 }
     );

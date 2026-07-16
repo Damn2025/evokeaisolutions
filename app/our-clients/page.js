@@ -137,7 +137,7 @@ const clients = [
   },
 ];
 
-const BOOKING_URL = 'https://evokeaisolutions.com/contact/';
+const BOOKING_URL = 'https://evokeaisolutions.com/contact-us';
 
 function CountUp({ to, duration = 1500, suffix = '' }) {
   const [count, setCount] = useState(0);

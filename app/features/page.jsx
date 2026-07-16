@@ -113,7 +113,7 @@ export default function Features() {
               From answering customer queries to managing leads and automating workflows, Evoke AI gives your business a team of AI employees that never sleep, never miss opportunities, and scale with your growth.
             </p>
             <div className={styles.heroCta}>
-              <a href="https://evokeaisolutions.com/contact/" rel="noopener noreferrer" className="inline-block" aria-label="Get Started with Evoke AI Solutions">
+              <a href="https://evokeaisolutions.com/contact-us" rel="noopener noreferrer" className="inline-block" aria-label="Get Started with Evoke AI Solutions">
                 <button type="button" className={`${styles.primaryBtn} !bg-gradient-to-r !from-[#0eaac8] !to-[#1dc393] !text-white !shadow-lg !shadow-cyan-500/30 hover:!shadow-cyan-500/50 hover:scale-105 transition-all font-extrabold tracking-wide`} aria-label="Get Started Button">
                   Get Started
                 </button>

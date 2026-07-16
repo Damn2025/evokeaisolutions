@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.cdnfonts.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,7 +27,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-N64NBVNC');`
         }} />
       </head>
-      <body suppressHydrationWarning>
+      <body>
         <noscript>
           <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N64NBVNC"
             height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} />

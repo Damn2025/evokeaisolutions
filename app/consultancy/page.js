@@ -27,7 +27,7 @@ export default function ConsultancyPage() {
       if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
       } else {
-        window.location.href = "/contact";
+        window.location.href = "/contact-us";
       }
     } else {
       const element = document.getElementById(sectionId);

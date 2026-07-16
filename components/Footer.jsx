@@ -110,7 +110,7 @@ const Footer = ({ theme }) => {
               <li><a href="/features" className={`text-sm font-bold ${theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-[#4DC6E3]'} transition-colors`}>Features</a></li>
               <li><a href="/our-clients" className={`text-sm font-bold ${theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-[#4DC6E3]'} transition-colors`}>Clients</a></li>
               <li><a href="/blog" className={`text-sm font-bold ${theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-[#4DC6E3]'} transition-colors`}>Blogs</a></li>
-              <li><a href="/contact" className={`text-sm font-bold ${theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-[#4DC6E3]'} transition-colors`}>Contact</a></li>
+              <li><a href="/contact-us" className={`text-sm font-bold ${theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-[#4DC6E3]'} transition-colors`}>Contact</a></li>
             </ul>
           </div>
 

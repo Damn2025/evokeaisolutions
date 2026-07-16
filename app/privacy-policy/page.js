@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
     if (sectionId === 'about') {
       window.location.href = '/about-us';
     } else if (sectionId === 'contact') {
-      window.location.href = '/contact';
+      window.location.href = '/contact-us';
     } else if (sectionId === 'features' || sectionId === 'automation') {
       window.location.href = '/features';
     } else if (sectionId === 'partners') {

@@ -19,7 +19,7 @@ export default function AiAssistantsPage() {
     if (sectionId === "about") {
       window.location.href = "/about-us";
     } else if (sectionId === "contact") {
-      window.location.href = "/contact";
+      window.location.href = "/contact-us";
     } else {
       const element = document.getElementById(sectionId);
       if (element) {

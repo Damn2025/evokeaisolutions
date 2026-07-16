@@ -28,7 +28,7 @@ export default function Blog() {
     if (sectionId === "about") {
       window.location.href = "https://evokeaisolutions.com/about-us/";
     } else if (sectionId === "contact") {
-      window.location.href = "https://evokeaisolutions.com/contact/";
+      window.location.href = "https://evokeaisolutions.com/contact-us";
     } else {
       const element = document.getElementById(sectionId);
       if (element) element.scrollIntoView({ behavior: "smooth", block: "start" });

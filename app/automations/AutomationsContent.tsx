@@ -1281,7 +1281,7 @@ export default function AutomationsContent() {
       const res = await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, target: 'automations' }),
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

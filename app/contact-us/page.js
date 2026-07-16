@@ -109,10 +109,15 @@ export default function ContactUsPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          source: 'contact-page',
+        }),
       });
 
-      if (response.ok) {
+      const result = await response.json().catch(() => ({}));
+
+      if (response.ok && result.success !== false) {
         confetti({
           particleCount: 150,
           spread: 80,
@@ -121,7 +126,7 @@ export default function ContactUsPage() {
         });
         setShowSuccessModal(true);
       } else {
-        alert('Failed to send the message. Please try again later.');
+        alert(result.message || 'Failed to send the message. Please try again later.');
       }
     } catch (error) {
       console.error('Error sending form:', error);
