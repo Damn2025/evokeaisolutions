@@ -24,6 +24,6 @@ dist-ssr
 *.sw?
 
 
-.next
+.next/
 .env
 .env.local

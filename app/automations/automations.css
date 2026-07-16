@@ -49,6 +49,10 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-right: 0.08em;
+  padding-bottom: 0.06em;
 }
 
 .automations-page .bg-grid-pattern {

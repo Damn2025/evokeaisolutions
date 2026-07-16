@@ -14,8 +14,6 @@ import {
   AlertCircle
 } from 'lucide-react';
 import * as THREE from 'three';
-import emailjs from '@emailjs/browser';
-import { EMAILJS_CONFIG } from '../../lib/emailjs.config.js';
 
 const ContactSection = ({ milestone, theme }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -123,12 +121,6 @@ const ContactSection = ({ milestone, theme }) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (EMAILJS_CONFIG.PUBLIC_KEY) {
-      emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-    }
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -140,56 +132,46 @@ const ContactSection = ({ milestone, theme }) => {
     setIsSubmitting(true);
     setError(null);
 
-    if (!EMAILJS_CONFIG.SERVICE_ID || !EMAILJS_CONFIG.TEMPLATE_ID || !EMAILJS_CONFIG.PUBLIC_KEY) {
-      setError('Email service is not configured. Please contact the administrator.');
-      setIsSubmitting(false);
-      return;
-    }
-
     try {
-      const templateParams = {
-        name: formData.name,
-        company: formData.company,
-        email: formData.email,
-        phone: formData.phone,
-        location: formData.location,
-        message: formData.message,
-        date: new Date().toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formData.name,
+          company: formData.company,
+          email: formData.email,
+          phone: formData.phone,
+          location: formData.location,
+          vision: formData.message,
         }),
-        time: new Date().toLocaleTimeString('en-US', { 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        }),
-      };
-
-      await emailjs.send(
-        EMAILJS_CONFIG.SERVICE_ID,
-        EMAILJS_CONFIG.TEMPLATE_ID,
-        templateParams
-      );
-
-      setIsSubmitting(false);
-      setSubmitted(true);
-      setFormData({ 
-        name: '', 
-        company: '', 
-        email: '', 
-        phone: '', 
-        location: '', 
-        message: '' 
       });
-      
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || result.success === false) {
+        throw new Error(result.message || 'Failed to send message');
+      }
+
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        company: '',
+        email: '',
+        phone: '',
+        location: '',
+        message: '',
+      });
+
       setTimeout(() => setSubmitted(false), 5000);
-      
     } catch (err) {
-      setIsSubmitting(false);
       setError(
-        err.text || 
+        err.message ||
         'Failed to send message. Please try again or contact us directly at hello@evoke-ai.com'
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node -e \"try{require('child_process').execSync('chmod -R u+rwX app components lib public',{stdio:'ignore'})}catch(e){}\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -33,8 +34,13 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
-    "postcss": "^8.4.47",
+    "postcss": "^8.5.10",
     "tailwindcss": "^3.4.13",
     "typescript": "5.9.3"
+  },
+  "overrides": {
+    "js-yaml": "^4.2.0",
+    "postcss": "^8.5.10",
+    "@babel/core": "^7.29.6"
   }
 }

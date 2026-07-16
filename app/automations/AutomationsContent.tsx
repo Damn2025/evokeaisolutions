@@ -1308,7 +1308,7 @@ export default function AutomationsContent() {
       <FAQ />
 
       {/* Final CTA */}
-      <section id="contact" className="section-padding bg-white text-evoke-black relative overflow-hidden">
+      <section id="contact" className="section-padding bg-white text-evoke-black relative overflow-x-clip overflow-y-visible">
         {/* Background Visuals */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
@@ -1352,9 +1352,12 @@ export default function AutomationsContent() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95]">
+              <h2 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[1.05] overflow-visible">
                 Ready to
-                <br /><span className="text-gradient"> Reclaim Your Time?</span>
+                <br />
+                <span className="text-gradient inline-block pr-[0.18em] pb-[0.12em]">
+                  Reclaim Your Time?
+                </span>
               </h2>
               <p className="text-2xl text-gray-600 mb-12 max-w-lg leading-relaxed font-medium">
                 Experience the future of intelligent business automation. Let's build your growth engine together.

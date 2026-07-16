@@ -17,7 +17,7 @@ import {
 const clients = [
   {
     id: 'astroremedis',
-    name: 'Astromedis',
+    name: 'Astroremedis',
     industry: 'Astrology',
     description: 'Developed an AI-powered astrology assistant that automates report generation and personalized recommendations.',
     summary: 'AI-powered astrology reports and personalized recommendations.',
@@ -77,7 +77,7 @@ const clients = [
   },
   {
     id: 'sustainable',
-    name: 'Sustainable Futures',
+    name: 'Sustainable Futures Trainings',
     industry: 'Education',
     description: 'We developed an intelligent learning platform with automation for student management, certifications, and personalized learning journeys.',
     summary: 'Automated learning and student management platform.',

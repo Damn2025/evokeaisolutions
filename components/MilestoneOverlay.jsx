@@ -19,6 +19,7 @@ const MilestoneOverlay = ({ theme }) => {
         return <AboutSection milestone={milestone} theme={theme} />;
       case 'agents':
         return <AgentsSection milestone={milestone} theme={theme} />;
+      case 'features':
       case 'automation':
         return <AutomationSection milestone={milestone} theme={theme} />;
       case 'partners':
@@ -39,7 +40,7 @@ const MilestoneOverlay = ({ theme }) => {
   return (
     <Suspense fallback={
       <div className={`h-screen w-full flex items-center justify-center ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
-        <div className="w-10 h-10 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
       </div>
     }>
       <div className="relative z-50">

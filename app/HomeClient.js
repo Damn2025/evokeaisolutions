@@ -33,7 +33,7 @@ function HomeContent() {
   return (
     <div className={`min-h-screen font-sans transition-colors duration-700 overflow-x-hidden ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
       <Navigation theme={theme} setTheme={setTheme} jumpTo={jumpTo} />
-      <Hero theme={theme} jumpTo={jumpTo}/>
+      <Hero theme={theme} jumpTo={jumpTo} />
       <Suspense fallback={null}>
         <MilestoneOverlay theme={theme} />
       </Suspense>

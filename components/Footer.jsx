@@ -6,7 +6,6 @@ import { Mail, Phone } from 'lucide-react';
 const evokeLogo = '/assets/evoke.webp';
 
 const Footer = ({ theme }) => {
-  const brandGradient = "bg-gradient-to-br from-[#0eaac8] via-[#27bce2] to-[#4DC6E3]";
   const textGradient = "text-transparent bg-clip-text bg-gradient-to-r from-[#0eaac8] to-[#1dc393]";
 
   const [showCookiePopup, setShowCookiePopup] = useState(false);
@@ -186,7 +185,7 @@ const Footer = ({ theme }) => {
           <p className="text-[10px] sm:text-[11px] font-bold text-zinc-500 uppercase tracking-[0.3em] leading-relaxed">
             &copy; 2026 <a href="https://evokeaisolutions.com/" rel="noopener noreferrer" className="text-xs font-bold text-zinc-500 hover:text-[#4DC6E3] transition-colors uppercase tracking-wider">
               EVOKE AI
-            </a>. ALL RIGHTS RESERVED. <a href="https://evokeaisolutions.com/privacy-policy/" rel="noopener noreferrer" className="text-xs font-bold text-zinc-500 hover:text-[#4DC6E3] transition-colors uppercase tracking-wider">
+            </a>. ALL RIGHTS RESERVED. <a href="/privacy-policy" className="text-xs font-bold text-zinc-500 hover:text-[#4DC6E3] transition-colors uppercase tracking-wider">
               Privacy Policy
             </a>
           </p>
@@ -194,29 +193,62 @@ const Footer = ({ theme }) => {
       </div>
 
       {showCookiePopup && (
-        <div className="fixed bottom-6 left-6 right-6 md:left-auto md:right-10 md:max-w-sm z-[600] animate-in fade-in slide-in-from-bottom-10 duration-700 ease-out">
-          <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-2xl ${theme === 'dark' ? 'bg-black/80 border-white/10' : 'bg-white/80 border-black/10'}`}>
-            <div className="space-y-5">
-              <div className="flex items-center gap-4">
-                <div className={`h-12 w-12 rounded-2xl ${brandGradient} flex items-center justify-center text-white shadow-lg shadow-[#0eaac8]/30 shrink-0`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" /><path d="M8.5 8.5v.01" /><path d="M16 15.5v.01" /><path d="M12 12v.01" /><path d="M11 17v.01" /><path d="M7 14v.01" /></svg>
-                </div>
-                <div>
-                  <h3 className={`text-sm font-black uppercase tracking-widest ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Cookies</h3>
-                  <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Privacy Preferences</p>
-                </div>
-              </div>
-              <p className="text-xs text-zinc-500 leading-relaxed font-medium">
-                We use cookies to optimize site functionality and give you the best possible experience on our AI platform.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={acceptCookies}
-                  className={`w-full py-3 px-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white ${brandGradient} hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-[#0eaac8]/20`}
-                >
-                  Accept All
-                </button>
-              </div>
+        <div className="fixed bottom-6 left-4 right-4 sm:left-auto sm:right-8 sm:w-[340px] z-[600] pt-10 animate-in fade-in slide-in-from-bottom-8 duration-500">
+          <div className="relative bg-white rounded-2xl shadow-[0_18px_50px_rgba(15,23,42,0.18)] border-2 border-[#0e99c8] px-5 pt-12 pb-5">
+            <div className="absolute -top-9 left-1/2 -translate-x-1/2 pointer-events-none" aria-hidden="true">
+              <svg width="92" height="64" viewBox="0 0 92 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="58" cy="36" rx="26" ry="24" fill="#B8804A" />
+                <circle cx="46" cy="28" r="3.2" fill="#5C3317" />
+                <circle cx="62" cy="22" r="2.6" fill="#5C3317" />
+                <circle cx="70" cy="38" r="3" fill="#4A2810" />
+                <circle cx="54" cy="44" r="2.4" fill="#5C3317" />
+                <path
+                  d="M44 34c-1.8 8.5 3.2 18.5 13.8 22.2C46.5 59.5 33 52.2 30 40.8c-2.2-8.2 2.6-16.2 10.5-19.2 1.2 4.2 2.4 9.2 3.5 12.4z"
+                  fill="#D4A574"
+                />
+                <path
+                  d="M28 30c11.5-10 28-8.5 34 2.2 2.8 5 2.2 11.2-1.4 15.8-9.5 12-28.8 7.2-33.6-6.4C24.6 34.8 25.2 31.8 28 30z"
+                  fill="#E8C39E"
+                />
+                <path
+                  d="M56 22c6.5 1.8 10.8 8.4 8.8 15.2-3.4-.6-7.2-4.8-8.8-15.2z"
+                  fill="#E8C39E"
+                />
+                <circle cx="34" cy="28" r="2.8" fill="#5C3317" />
+                <circle cx="42" cy="38" r="3.2" fill="#4A2810" />
+                <circle cx="50" cy="30" r="2.4" fill="#5C3317" />
+                <circle cx="38" cy="46" r="2.2" fill="#5C3317" />
+                <path
+                  d="M54 42c2.4 3.8 1.2 8.2-2.2 10.6 5.6.4 10-3.4 10.4-8.6-.2-1.2-4.8-2.4-8.2-2z"
+                  fill="#E8C39E"
+                />
+              </svg>
+            </div>
+
+            <h3
+              className="text-lg font-bold text-slate-800 mb-2 text-center tracking-tight"
+              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            >
+              Cookie Consent
+            </h3>
+            <p className="text-[13px] leading-relaxed text-slate-500 font-medium text-center">
+              We use cookies for essential website functions and to better understand how you use our site, so we can create the best possible experience for you
+            </p>
+
+            <div className="mt-5 flex items-center justify-between gap-4">
+              <a
+                href="/privacy-policy"
+                className="text-[13px] font-medium text-slate-500 hover:text-[#0e99c8] transition-colors underline-offset-2 hover:underline"
+              >
+                Privacy Policy
+              </a>
+              <button
+                type="button"
+                onClick={acceptCookies}
+                className="shrink-0 px-5 py-2 rounded-full text-[13px] font-semibold text-white bg-[#0e99c8] hover:bg-[#0d8bb6] transition-colors shadow-md shadow-[#0e99c8]/25 active:scale-[0.98]"
+              >
+                Got It
+              </button>
             </div>
           </div>
         </div>

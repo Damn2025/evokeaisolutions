@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Menu, X, ChevronDown, Workflow, Bot, ShieldCheck } from 'lucide-react';
 import { MILESTONES } from '../lib/constants';
 
@@ -9,6 +9,7 @@ const evokeLogo = '/assets/evoke.webp';
 
 const Navigation = ({ theme, jumpTo }) => {
   const router = useRouter();
+  const pathname = usePathname() || '/';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAgentsDropdownOpen, setIsAgentsDropdownOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
@@ -60,13 +61,47 @@ const Navigation = ({ theme, jumpTo }) => {
 
   const routeByNavId = {
     about: '/about-us',
-    automation: '/automations',
+    features: '/features',
+    automation: '/features', // legacy milestone id
     partners: '/our-clients',
     blogs: '/blog',
     contact: '/contact',
     'ai-assistants': '/ai-assistants',
     consultancy: '/consultancy',
   };
+
+  const isActivePath = (path) => {
+    if (path === '/') return pathname === '/';
+    if (path === '/contact') return pathname === '/contact' || pathname === '/contact-us';
+    return pathname === path || pathname.startsWith(`${path}/`);
+  };
+
+  const isServicesActive =
+    isActivePath('/automations') ||
+    isActivePath('/ai-assistants') ||
+    isActivePath('/consultancy');
+
+  const desktopNavClass = (active) =>
+    `nav-item-shiny text-sm font-bold tracking-[0.15em] uppercase relative overflow-hidden px-5 py-2.5 rounded-lg transition-all duration-300 hover:scale-105 group ${
+      active
+        ? isDark
+          ? 'text-[#27bce2] bg-white/10'
+          : 'text-[#028fbe] bg-[#028fbe]/10'
+        : isDark
+          ? 'text-white'
+          : 'text-black'
+    }`;
+
+  const mobileNavClass = (active) =>
+    `w-full text-left px-4 py-3 rounded-lg font-bold text-sm tracking-[0.15em] uppercase transition-all duration-300 ${
+      active
+        ? isDark
+          ? 'text-[#27bce2] bg-white/10'
+          : 'text-[#028fbe] bg-[#028fbe]/10'
+        : isDark
+          ? 'text-white hover:bg-white/10 active:bg-white/20'
+          : 'text-black hover:bg-black/10 active:bg-black/20'
+    }`;
 
   const handleNavClick = (sectionId) => {
     setIsMobileMenuOpen(false);
@@ -79,11 +114,28 @@ const Navigation = ({ theme, jumpTo }) => {
       return;
     }
 
-    jumpTo(sectionId);
+    if (typeof jumpTo === 'function') {
+      jumpTo(sectionId);
+    }
+  };
+
+  const handleHomeClick = () => {
+    setIsMobileMenuOpen(false);
+    setIsAgentsDropdownOpen(false);
+    setIsServicesDropdownOpen(false);
+    router.push('/');
   };
 
   const handleAboutClick = () => {
+    setIsMobileMenuOpen(false);
     router.push('/about-us');
+  };
+
+  const handleFeaturesClick = () => {
+    setIsMobileMenuOpen(false);
+    setIsAgentsDropdownOpen(false);
+    setIsServicesDropdownOpen(false);
+    router.push('/features');
   };
 
   const handleServiceClick = (route) => {
@@ -97,10 +149,7 @@ const Navigation = ({ theme, jumpTo }) => {
       <nav className={`fixed top-0 left-0 w-full z-[200] px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center backdrop-blur-xl border-b transition-all duration-500 ${theme === 'dark' ? 'bg-black/40 border-white/5' : 'bg-white/40 border-black/5'}`}>
         <button
           type="button"
-          onClick={() => {
-            setIsMobileMenuOpen(false);
-            router.push('/');
-          }}
+          onClick={handleHomeClick}
           className="flex items-center gap-2"
         >
           <div className="flex items-center group cursor-pointer">
@@ -125,17 +174,112 @@ const Navigation = ({ theme, jumpTo }) => {
         <div className="hidden lg:flex items-center gap-10">
 
           <button
+            type="button"
+            onClick={handleHomeClick}
+            className={desktopNavClass(isActivePath('/'))}
+            aria-current={isActivePath('/') ? 'page' : undefined}
+          >
+            <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${theme === 'dark' ? 'via-white/40' : 'via-black/20'} to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out rounded-lg`}></div>
+            <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/5'} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg`}></div>
+            <span className="relative z-10">Home</span>
+            {isActivePath('/') && (
+              <span className="absolute left-3 right-3 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-[#0eaac8] to-[#1dc393]" />
+            )}
+          </button>
+
+          <button
+            type="button"
             onClick={handleAboutClick}
-            className={`nav-item-shiny text-sm font-bold tracking-[0.15em] uppercase relative overflow-hidden px-5 py-2.5 rounded-lg transition-all duration-300 hover:scale-105 group ${theme === 'dark' ? 'text-white' : 'text-black'}`}
+            className={desktopNavClass(isActivePath('/about-us'))}
+            aria-current={isActivePath('/about-us') ? 'page' : undefined}
           >
             <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${theme === 'dark' ? 'via-white/40' : 'via-black/20'} to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out rounded-lg`}></div>
             <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/5'} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg`}></div>
             <span className="relative z-10">About</span>
+            {isActivePath('/about-us') && (
+              <span className="absolute left-3 right-3 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-[#0eaac8] to-[#1dc393]" />
+            )}
+          </button>
+
+          <div className="relative" ref={servicesDropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
+              className={`${desktopNavClass(isServicesActive)} flex items-center gap-2`}
+              aria-current={isServicesActive ? 'page' : undefined}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${theme === 'dark' ? 'via-white/40' : 'via-black/20'} to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out rounded-lg`}></div>
+              <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/5'} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg`}></div>
+              <span className="relative z-10">Services</span>
+              <ChevronDown
+                size={14}
+                className={`relative z-10 transition-transform duration-300 ${isServicesDropdownOpen ? 'rotate-180' : ''}`}
+              />
+              {isServicesActive && (
+                <span className="absolute left-3 right-3 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-[#0eaac8] to-[#1dc393]" />
+              )}
+            </button>
+
+            {isServicesDropdownOpen && (
+              <div className={`absolute top-full left-0 mt-2 w-56 rounded-xl shadow-2xl overflow-hidden z-[250] ${theme === 'dark' ? 'bg-black/95 border border-white/10' : 'bg-white/95 border border-black/10'} backdrop-blur-xl`}>
+                <button
+                  type="button"
+                  onClick={() => handleServiceClick('/automations')}
+                  className={`block w-full text-left px-4 py-3 transition-all duration-300 hover:scale-[1.02] ${theme === 'dark' ? 'hover:bg-white/10 text-white' : 'hover:bg-black/10 text-black'}`}
+                >
+                  <div className="flex items-center gap-2 font-black text-sm uppercase tracking-wide">
+                    <div className="p-1 rounded-full bg-blue-500/20 flex items-center justify-center">
+                      <Workflow size={16} className="text-blue-400" />
+                    </div>
+                    AI Automation
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleServiceClick('/ai-assistants')}
+                  className={`block w-full text-left px-4 py-3 transition-all duration-300 hover:scale-[1.02] ${theme === 'dark' ? 'hover:bg-white/10 text-white' : 'hover:bg-black/10 text-black'}`}
+                >
+                  <div className="flex items-center gap-2 font-black text-sm uppercase tracking-wide">
+                    <div className="p-1 rounded-full bg-purple-500/20 flex items-center justify-center">
+                      <Bot size={16} className="text-purple-400" />
+                    </div>
+                    AI Assistant
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleServiceClick('/consultancy')}
+                  className={`block w-full text-left px-4 py-3 transition-all duration-300 hover:scale-[1.02] ${theme === 'dark' ? 'hover:bg-white/10 text-white' : 'hover:bg-black/10 text-black'}`}
+                >
+                  <div className="flex items-center gap-2 font-black text-sm uppercase tracking-wide">
+                    <div className="p-1 rounded-full bg-green-500/20 flex items-center justify-center">
+                      <ShieldCheck size={16} className="text-green-400" />
+                    </div>
+                    AI Consultancy
+                  </div>
+                </button>
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleFeaturesClick}
+            className={desktopNavClass(isActivePath('/features'))}
+            aria-current={isActivePath('/features') ? 'page' : undefined}
+          >
+            <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${theme === 'dark' ? 'via-white/40' : 'via-black/20'} to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out rounded-lg`}></div>
+            <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/5'} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg`}></div>
+            <span className="relative z-10">Features</span>
+            {isActivePath('/features') && (
+              <span className="absolute left-3 right-3 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-[#0eaac8] to-[#1dc393]" />
+            )}
           </button>
 
           {MILESTONES.map((m) => {
             // Agents dropdown commented out — hide from nav
-            if (m.id === 'about' || m.id === 'faq' || m.id === 'social' || m.id === 'agents') {
+            // Features is a dedicated button above — skip milestone duplicate
+            if (m.id === 'about' || m.id === 'faq' || m.id === 'social' || m.id === 'agents' || m.id === 'features' || m.id === 'automation') {
               return null;
             }
 
@@ -204,73 +348,22 @@ const Navigation = ({ theme, jumpTo }) => {
             return (
               <button
                 key={m.id}
+                type="button"
                 onClick={() => handleNavClick(m.id)}
-                className={`nav-item-shiny text-sm font-bold tracking-[0.15em] uppercase relative overflow-hidden px-5 py-2.5 rounded-lg transition-all duration-300 hover:scale-105 group ${theme === 'dark' ? 'text-white' : 'text-black'}`}
+                className={desktopNavClass(isActivePath(routeByNavId[m.id] || ''))}
+                aria-current={isActivePath(routeByNavId[m.id] || '') ? 'page' : undefined}
               >
                 <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${theme === 'dark' ? 'via-white/40' : 'via-black/20'} to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out rounded-lg`}></div>
                 <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/5'} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg`}></div>
                 <span className="relative z-10">
                   {m.label}
                 </span>
+                {isActivePath(routeByNavId[m.id] || '') && (
+                  <span className="absolute left-3 right-3 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-[#0eaac8] to-[#1dc393]" />
+                )}
               </button>
             );
           })}
-
-          <div className="relative" ref={servicesDropdownRef}>
-            <button
-              onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
-              className={`nav-item-shiny text-sm font-bold tracking-[0.15em] uppercase relative overflow-hidden px-5 py-2.5 rounded-lg transition-all duration-300 hover:scale-105 group flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}
-            >
-              <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${theme === 'dark' ? 'via-white/40' : 'via-black/20'} to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out rounded-lg`}></div>
-              <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/5'} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg`}></div>
-              <span className="relative z-10">Services</span>
-              <ChevronDown
-                size={14}
-                className={`relative z-10 transition-transform duration-300 ${isServicesDropdownOpen ? 'rotate-180' : ''}`}
-              />
-            </button>
-
-            {isServicesDropdownOpen && (
-              <div className={`absolute top-full left-0 mt-2 w-56 rounded-xl shadow-2xl overflow-hidden z-[250] ${theme === 'dark' ? 'bg-black/95 border border-white/10' : 'bg-white/95 border border-black/10'} backdrop-blur-xl`}>
-                <button
-                  type="button"
-                  onClick={() => handleServiceClick('/automations')}
-                  className={`block w-full text-left px-4 py-3 transition-all duration-300 hover:scale-[1.02] ${theme === 'dark' ? 'hover:bg-white/10 text-white' : 'hover:bg-black/10 text-black'}`}
-                >
-                  <div className="flex items-center gap-2 font-black text-sm uppercase tracking-wide">
-                    <div className="p-1 rounded-full bg-blue-500/20 flex items-center justify-center">
-                      <Workflow size={16} className="text-blue-400" />
-                    </div>
-                    AI Automation
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleServiceClick('/ai-assistants')}
-                  className={`block w-full text-left px-4 py-3 transition-all duration-300 hover:scale-[1.02] ${theme === 'dark' ? 'hover:bg-white/10 text-white' : 'hover:bg-black/10 text-black'}`}
-                >
-                  <div className="flex items-center gap-2 font-black text-sm uppercase tracking-wide">
-                    <div className="p-1 rounded-full bg-purple-500/20 flex items-center justify-center">
-                      <Bot size={16} className="text-purple-400" />
-                    </div>
-                    AI Assistant
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleServiceClick('/consultancy')}
-                  className={`block w-full text-left px-4 py-3 transition-all duration-300 hover:scale-[1.02] ${theme === 'dark' ? 'hover:bg-white/10 text-white' : 'hover:bg-black/10 text-black'}`}
-                >
-                  <div className="flex items-center gap-2 font-black text-sm uppercase tracking-wide">
-                    <div className="p-1 rounded-full bg-green-500/20 flex items-center justify-center">
-                      <ShieldCheck size={16} className="text-green-400" />
-                    </div>
-                    AI Consultancy
-                  </div>
-                </button>
-              </div>
-            )}
-          </div>
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
@@ -307,9 +400,100 @@ const Navigation = ({ theme, jumpTo }) => {
           } ${theme === 'dark' ? 'bg-black/95 border-b border-white/10' : 'bg-white/95 border-b border-black/10'} backdrop-blur-xl`}
       >
         <div className="px-4 py-6 space-y-2">
+          <button
+            type="button"
+            onClick={handleHomeClick}
+            className={mobileNavClass(isActivePath('/'))}
+            aria-current={isActivePath('/') ? 'page' : undefined}
+          >
+            Home
+          </button>
+          <button
+            type="button"
+            onClick={handleAboutClick}
+            className={mobileNavClass(isActivePath('/about-us'))}
+            aria-current={isActivePath('/about-us') ? 'page' : undefined}
+          >
+            About
+          </button>
+          <div>
+            <button
+              type="button"
+              onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
+              className={`${mobileNavClass(isServicesActive)} flex items-center justify-between`}
+              aria-current={isServicesActive ? 'page' : undefined}
+            >
+              Services
+              <ChevronDown
+                size={16}
+                className={`transition-transform duration-300 ${isServicesDropdownOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+
+            {isServicesDropdownOpen && (
+              <div className="pl-4 mt-2 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => handleServiceClick('/automations')}
+                  className={`block w-full text-left px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wide transition-all duration-300 ${
+                    isActivePath('/automations')
+                      ? isDark
+                        ? 'text-[#27bce2] bg-white/10'
+                        : 'text-[#028fbe] bg-[#028fbe]/10'
+                      : theme === 'dark'
+                        ? 'text-white/80 hover:bg-white/10 hover:text-white'
+                        : 'text-black/80 hover:bg-black/10 hover:text-black'
+                  }`}
+                  style={{ borderLeft: '3px solid #0eaac8' }}
+                >
+                  Automation
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleServiceClick('/ai-assistants')}
+                  className={`block w-full text-left px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wide transition-all duration-300 ${
+                    isActivePath('/ai-assistants')
+                      ? isDark
+                        ? 'text-[#27bce2] bg-white/10'
+                        : 'text-[#028fbe] bg-[#028fbe]/10'
+                      : theme === 'dark'
+                        ? 'text-white/80 hover:bg-white/10 hover:text-white'
+                        : 'text-black/80 hover:bg-black/10 hover:text-black'
+                  }`}
+                  style={{ borderLeft: '3px solid #a855f7' }}
+                >
+                  Assistant
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleServiceClick('/consultancy')}
+                  className={`block w-full text-left px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wide transition-all duration-300 ${
+                    isActivePath('/consultancy')
+                      ? isDark
+                        ? 'text-[#27bce2] bg-white/10'
+                        : 'text-[#028fbe] bg-[#028fbe]/10'
+                      : theme === 'dark'
+                        ? 'text-white/80 hover:bg-white/10 hover:text-white'
+                        : 'text-black/80 hover:bg-black/10 hover:text-black'
+                  }`}
+                  style={{ borderLeft: '3px solid #1dc393' }}
+                >
+                  Consultancy
+                </button>
+              </div>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={handleFeaturesClick}
+            className={mobileNavClass(isActivePath('/features'))}
+            aria-current={isActivePath('/features') ? 'page' : undefined}
+          >
+            Features
+          </button>
           {MILESTONES.map((m) => {
             // Agents dropdown commented out — hide from nav
-            if (m.id === 'about' || m.id === 'faq' || m.id === 'social' || m.id === 'agents') {
+            if (m.id === 'about' || m.id === 'faq' || m.id === 'social' || m.id === 'agents' || m.id === 'features' || m.id === 'automation') {
               return null;
             }
 
@@ -376,11 +560,10 @@ const Navigation = ({ theme, jumpTo }) => {
             return (
               <button
                 key={m.id}
+                type="button"
                 onClick={() => handleNavClick(m.id)}
-                className={`w-full text-left px-4 py-3 rounded-lg font-bold text-sm tracking-[0.15em] uppercase transition-all duration-300 ${theme === 'dark'
-                    ? 'text-white hover:bg-white/10 active:bg-white/20'
-                    : 'text-black hover:bg-black/10 active:bg-black/20'
-                  }`}
+                className={mobileNavClass(isActivePath(routeByNavId[m.id] || ''))}
+                aria-current={isActivePath(routeByNavId[m.id] || '') ? 'page' : undefined}
               >
                 {m.label}
               </button>
@@ -388,66 +571,7 @@ const Navigation = ({ theme, jumpTo }) => {
           })}
 
           <button
-            onClick={handleAboutClick}
-            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-sm tracking-[0.15em] uppercase transition-all duration-300 ${theme === 'dark'
-                ? 'text-white hover:bg-white/10 active:bg-white/20'
-                : 'text-black hover:bg-black/10 active:bg-black/20'
-              }`}
-          >
-            About
-          </button>
-
-          <div>
-            <button
-              onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
-              className={`w-full text-left px-4 py-3 rounded-lg font-bold text-sm tracking-[0.15em] uppercase transition-all duration-300 flex items-center justify-between ${theme === 'dark'
-                  ? 'text-white hover:bg-white/10 active:bg-white/20'
-                  : 'text-black hover:bg-black/10 active:bg-black/20'
-                }`}
-            >
-              Services
-              <ChevronDown
-                size={16}
-                className={`transition-transform duration-300 ${isServicesDropdownOpen ? 'rotate-180' : ''}`}
-              />
-            </button>
-
-            {isServicesDropdownOpen && (
-              <div className="pl-4 mt-2 space-y-1">
-                <button
-                  onClick={() => handleServiceClick('/automations')}
-                  className={`block w-full text-left px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wide transition-all duration-300 ${theme === 'dark'
-                      ? 'text-white/80 hover:bg-white/10 hover:text-white'
-                      : 'text-black/80 hover:bg-black/10 hover:text-black'
-                    }`}
-                  style={{ borderLeft: '3px solid #0eaac8' }}
-                >
-                  Automation
-                </button>
-                <button
-                  onClick={() => handleServiceClick('/ai-assistants')}
-                  className={`block w-full text-left px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wide transition-all duration-300 ${theme === 'dark'
-                      ? 'text-white/80 hover:bg-white/10 hover:text-white'
-                      : 'text-black/80 hover:bg-black/10 hover:text-black'
-                    }`}
-                  style={{ borderLeft: '3px solid #a855f7' }}
-                >
-                  Assistant
-                </button>
-                <button
-                  onClick={() => handleServiceClick('/consultancy')}
-                  className={`block w-full text-left px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wide transition-all duration-300 ${theme === 'dark'
-                      ? 'text-white/80 hover:bg-white/10 hover:text-white'
-                      : 'text-black/80 hover:bg-black/10 hover:text-black'
-                    }`}
-                  style={{ borderLeft: '3px solid #1dc393' }}
-                >
-                  Consultancy
-                </button>
-              </div>
-            )}
-          </div>
-          <button
+            type="button"
             onClick={() => handleNavClick('contact')}
             className="w-full mt-4 bg-gradient-to-r from-[#0e99c8] to-[#1dc393] text-white px-4 py-3 rounded-lg text-xs font-black uppercase tracking-widest shadow-xl shadow-cyan-500/20 transition-transform active:scale-95"
           >
